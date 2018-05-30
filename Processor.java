@@ -88,7 +88,7 @@ public class Processor {
 
     public boolean logOut() throws IOException {
         if (this.text.startsWith("/LEAVE")) {
-            String res = getData(Utils.getURL() + "/authoris?login="+ login + "&exit=true");
+            String res = getData(Utils.getURL() + "/authoris?login=" + login + "&exit=true");
             System.out.println("You leave chat(((");
             return true;
         }
@@ -98,24 +98,27 @@ public class Processor {
     public boolean getStatus() {
         if (this.text.startsWith("/INFO")) {
             String url = Utils.getURL() + "/userstatus";
-            try {
-                String[] result = gson.fromJson(getData(url), String[].class);
-                for (String item : result) {
-                    System.out.println(item);
+            if (this.text.length() > 5){
+                url = url+"?login="+this.text.substring(6);
+            }
+                try {
+                    String[] result = gson.fromJson(getData(url), String[].class);
+                    for (String item : result) {
+                        System.out.println(item);
+
+                    }
+                    return true;
+                } catch (IOException e) {
+                    e.printStackTrace();
 
                 }
-                return true;
-            } catch (IOException e) {
-                e.printStackTrace();
-
-            }
         }
         return false;
 
     }
 
 
-    private String getData(String sUrl) throws IOException {
+    public static String getData(String sUrl) throws IOException {
         String data = "";
         URL url = new URL(sUrl);
         HttpURLConnection connect = (HttpURLConnection) url.openConnection();
@@ -138,16 +141,18 @@ public class Processor {
         return data;
     }
 
-    public boolean help(){
-        if (this.text.startsWith("/HELP")){
+    public boolean help() {
+        if (this.text.startsWith("/HELP")) {
             System.out.println("/PRIVATE username text -> send private message to username");
             System.out.println("/ENTER roomname -> create chatroom or enter in existing");
             System.out.println("/ROOM roomname text -> send message to chatroom roomname");
             System.out.println("/EXIT roomname -> exit from chatroom");
             System.out.println("/INFO -> get all users status");
+            System.out.println("/INFO username -> get username status");
             System.out.println("/LEAVE -> disconnect from chat");
             return true;
         }
         return false;
     }
 }
+
