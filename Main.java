@@ -34,9 +34,13 @@ public class Main {
 
 
             while (true) {
-//                System.out.println("Enter your message: ");
+
                 String text = scanner.nextLine();
-                if (text.isEmpty()) break;
+                if (text.isEmpty()) {
+                    String res = Processor.getData(Utils.getURL() + "/authoris?login=" + login + "&exit=true");
+                    System.out.println("You leave chat(((");
+                    break;
+                }
                 Processor processor = new Processor(login, text);
                 processor.work();
             }
